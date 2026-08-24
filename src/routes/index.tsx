@@ -50,7 +50,7 @@ const hubDetails: Record<
     kicker: 'Private coaching',
     title: 'Precision training, by appointment',
     description:
-      'Elite one-on-one technical and tactical training at select premium athletic spaces across NYC.',
+      'Elite one-on-one technical and tactical training at select premium athletic spaces across Manhattan.',
     meta: 'Manhattan · Individual development plans',
   },
   flagship: {
@@ -92,7 +92,7 @@ const programs = [
   },
 ]
 
-// UPDATED TIER 01 & TIER 02
+// CLEANED AND CONSOLIDATED ROSTER DATA
 const staff = [
   {
     tier: 'Tier 01 · Founding leadership',
@@ -107,7 +107,7 @@ const staff = [
     name: 'Sarah Ellis',
     role: 'Co-Founder · Athlete Development',
     credentials: ['Founding Director', 'Moroccan National Team', 'Full Athletic Scholarship', 'NCAA Division I Athlete'],
-    image: '/images/sarah-headshot.jepg',
+    image: '/images/sarah-ellis.jpg',
     featured: 'founder',
   },
   {
@@ -120,10 +120,9 @@ const staff = [
   }
 ]
 
-// UPDATED TIER 04 & TIER 05 (Now structured exactly like staff so they get images)
 const developmentStaff = [
   {
-    tier: 'Tier 04 · Competitive Performance',
+    tier: 'Tier 03 · International Competitors',
     name: 'Eduardo Duarte',
     role: 'Team Portugal / LIU',
     credentials: ['Collegiate & International Competitor'],
@@ -131,7 +130,7 @@ const developmentStaff = [
     featured: 'standard',
   },
   {
-    tier: 'Tier 04 · Competitive Performance',
+    tier: 'Tier 03 · International Competitors',
     name: 'Omari Smoak',
     role: 'Team USA / St. Johns',
     credentials: ['Collegiate & International Competitor'],
@@ -139,7 +138,7 @@ const developmentStaff = [
     featured: 'standard',
   },
   {
-    tier: 'Tier 04 · Competitive Performance',
+    tier: 'Tier 03 · International Competitors',
     name: 'Baron Chang',
     role: 'Team Taiwan / LIU',
     credentials: ['Collegiate & International Competitor'],
@@ -147,7 +146,7 @@ const developmentStaff = [
     featured: 'standard',
   },
   {
-    tier: 'Tier 04 · Competitive Performance',
+    tier: 'Tier 03 · International Competitors',
     name: 'Costanza Greggi',
     role: 'LIU / NCAA',
     credentials: ['Collegiate & International Competitor'],
@@ -155,7 +154,7 @@ const developmentStaff = [
     featured: 'standard',
   },
   {
-    tier: 'Tier 05 · NCAA Development',
+    tier: 'Tier 04 · Nationally Competitive',
     name: 'Francesca Perez',
     role: 'LIU',
     credentials: ['NCAA & Nationally Competitive Coach'],
@@ -163,7 +162,7 @@ const developmentStaff = [
     featured: 'standard',
   },
   {
-    tier: 'Tier 05 · NCAA Development',
+    tier: 'Tier 04 · Nationally Competitive',
     name: 'Mindi Sherpa',
     role: 'LIU',
     credentials: ['NCAA & Nationally Competitive Coach'],
@@ -171,7 +170,7 @@ const developmentStaff = [
     featured: 'standard',
   },
   {
-    tier: 'Tier 05 · NCAA Development',
+    tier: 'Tier 04 · Nationally Competitive',
     name: 'Cameron Daniel',
     role: 'NYU',
     credentials: ['NCAA & Nationally Competitive Coach'],
@@ -272,7 +271,6 @@ function AtlasLionsHome() {
       </header>
 
       <section className="hero" id="top">
-        {/* Make sure to upload your hero-bg.jpg from the branding suite here! */}
         <img src="/images/hero-fencing.jpg" alt="Elite fencers competing under arena lights" />
         <div className="hero-overlay" />
         <div className="hero-grid" />
@@ -394,7 +392,6 @@ function AtlasLionsHome() {
             <div><Award /><span><strong>SafeSport</strong>Aligned coaching culture</span></div>
           </div>
 
-          {/* THIS IS THE SECTION WE UPDATED TO RENDER YOUR REAL ROSTER */}
           <div className="staff-pyramid">
             <div className="founder-grid">
               {staff.slice(0, 2).map((person, index) => <CoachCard key={`${person.name}-${index}`} person={person} />)}
@@ -468,7 +465,8 @@ function AtlasLionsHome() {
   )
 }
 
-function CoachCard({ person }: { person: (typeof staff)[number] }) {
+// THIS COMPONENT RENDERS THE CARDS FOR BOTH DATA ARRAYS
+function CoachCard({ person }: { person: any }) {
   return (
     <article className={`coach-card coach-${person.featured}`}>
       <img src={person.image} alt={`${person.name}, ${person.role}`} />
@@ -477,7 +475,7 @@ function CoachCard({ person }: { person: (typeof staff)[number] }) {
       <div className="coach-info">
         <p>{person.role}</p>
         <h3>{person.name}</h3>
-        <div>{person.credentials.map((credential) => <span key={credential}>{credential}</span>)}</div>
+        <div>{person.credentials.map((credential: string) => <span key={credential}>{credential}</span>)}</div>
       </div>
     </article>
   )
