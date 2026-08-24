@@ -107,7 +107,7 @@ const staff = [
     name: 'Sarah Ellis',
     role: 'Co-Founder · Athlete Development',
     credentials: ['Founding Director', 'Moroccan National Team', 'Full Athletic Scholarship', 'NCAA Division I Athlete'],
-    image: '/images/sarah-ellis.jpg',
+    image: '/images/sarah-headshot.jepg',
     featured: 'founder',
   },
   {
