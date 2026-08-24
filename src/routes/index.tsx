@@ -50,7 +50,7 @@ const hubDetails: Record<
     kicker: 'Private coaching',
     title: 'Precision training, by appointment',
     description:
-      'Elite one-on-one technical and tactical training at select premium athletic spaces across Manhattan.',
+      'Elite one-on-one technical and tactical training at select premium athletic spaces across NYC.',
     meta: 'Manhattan · Individual development plans',
   },
   flagship: {
@@ -92,48 +92,92 @@ const programs = [
   },
 ]
 
+// UPDATED TIER 01 & TIER 02
 const staff = [
   {
     tier: 'Tier 01 · Founding leadership',
-    name: 'Founding Director',
+    name: 'Yehia Ellis',
     role: 'Co-Founder · Épée Program',
-    credentials: ['Moroccan National Team', 'World Cup & Grand Prix Competitor', 'NCAA Division I Athlete'],
-    image: '/images/coach-courtney.jpg',
+    credentials: ['Founding Director', 'Moroccan National Team', 'World Cup & Grand Prix Competitor', 'NCAA Division I Athlete'],
+    image: '/images/yehia-ellis.jpg',
     featured: 'founder',
   },
   {
     tier: 'Tier 01 · Founding leadership',
-    name: 'Founding Director',
+    name: 'Sarah Ellis',
     role: 'Co-Founder · Athlete Development',
-    credentials: ['Moroccan National Team', 'Full Athletic Scholarship', 'NCAA Division I Athlete'],
-    image: '/images/coach-ibtihaj.jpg',
+    credentials: ['Founding Director', 'Moroccan National Team', 'Full Athletic Scholarship', 'NCAA Division I Athlete'],
+    image: '/images/sarah-ellis.jpg',
     featured: 'founder',
   },
   {
     tier: 'Tier 02 · Marquee talent',
-    name: 'Mohamed Elsayed',
+    name: 'Mohammed Elsayed',
     role: 'Olympic Medalist · Épée',
-    credentials: ['Paris Olympic Bronze Medalist', 'NCAA Division I Champion'],
-    image: '/images/final-fencing.jpg',
+    credentials: ['3x NCAA Champion', '10x World Champion', 'Current #1 in the World'],
+    image: '/images/mohammed-elsayed.jpg',
     featured: 'marquee',
-  },
-  {
-    tier: 'Tier 03 · International performance',
-    name: 'International Performance',
-    role: 'Competitive Pathway Coach',
-    credentials: ['International circuit experience', 'Collegiate athlete development'],
-    image: '/images/team-fencing.jpg',
-    featured: 'spotlight',
-  },
+  }
 ]
 
+// UPDATED TIER 04 & TIER 05 (Now structured exactly like staff so they get images)
 const developmentStaff = [
-  ['Division I Performance', 'Competitive pathway coach'],
-  ['Division I Technique', 'Technical development coach'],
-  ['Division I Strength', 'Athletic preparation coach'],
-  ['Division I Strategy', 'Tactical development coach'],
-  ['Collegiate Development', 'NCAA Division III coach'],
-  ['Youth Development', 'NCAA Division III coach'],
+  {
+    tier: 'Tier 04 · Competitive Performance',
+    name: 'Eduardo Duarte',
+    role: 'Team Portugal / LIU',
+    credentials: ['Collegiate & International Competitor'],
+    image: '/images/eduardo-duarte.jpg',
+    featured: 'standard',
+  },
+  {
+    tier: 'Tier 04 · Competitive Performance',
+    name: 'Omari Smoak',
+    role: 'Team USA / St. Johns',
+    credentials: ['Collegiate & International Competitor'],
+    image: '/images/omari-smoak.jpg',
+    featured: 'standard',
+  },
+  {
+    tier: 'Tier 04 · Competitive Performance',
+    name: 'Baron Chang',
+    role: 'Team Taiwan / LIU',
+    credentials: ['Collegiate & International Competitor'],
+    image: '/images/baron-chang.jpg',
+    featured: 'standard',
+  },
+  {
+    tier: 'Tier 04 · Competitive Performance',
+    name: 'Costanza Greggi',
+    role: 'LIU / NCAA',
+    credentials: ['Collegiate & International Competitor'],
+    image: '/images/costanza-greggi.jpg',
+    featured: 'standard',
+  },
+  {
+    tier: 'Tier 05 · NCAA Development',
+    name: 'Francesca Perez',
+    role: 'LIU',
+    credentials: ['NCAA & Nationally Competitive Coach'],
+    image: '/images/francesca-perez.jpg',
+    featured: 'standard',
+  },
+  {
+    tier: 'Tier 05 · NCAA Development',
+    name: 'Mindi Sherpa',
+    role: 'LIU',
+    credentials: ['NCAA & Nationally Competitive Coach'],
+    image: '/images/mindi-sherpa.jpg',
+    featured: 'standard',
+  },
+  {
+    tier: 'Tier 05 · NCAA Development',
+    name: 'Cameron Daniel',
+    role: 'NYU',
+    credentials: ['NCAA & Nationally Competitive Coach'],
+    image: '/images/cameron-daniel.jpg',
+    featured: 'standard',
+  }
 ]
 
 function encodeForm(data: Record<string, string>) {
@@ -228,6 +272,7 @@ function AtlasLionsHome() {
       </header>
 
       <section className="hero" id="top">
+        {/* Make sure to upload your hero-bg.jpg from the branding suite here! */}
         <img src="/images/hero-fencing.jpg" alt="Elite fencers competing under arena lights" />
         <div className="hero-overlay" />
         <div className="hero-grid" />
@@ -349,20 +394,16 @@ function AtlasLionsHome() {
             <div><Award /><span><strong>SafeSport</strong>Aligned coaching culture</span></div>
           </div>
 
+          {/* THIS IS THE SECTION WE UPDATED TO RENDER YOUR REAL ROSTER */}
           <div className="staff-pyramid">
             <div className="founder-grid">
               {staff.slice(0, 2).map((person, index) => <CoachCard key={`${person.name}-${index}`} person={person} />)}
             </div>
             <CoachCard person={staff[2]} />
-            <div className="spotlight-wrap"><CoachCard person={staff[3]} /></div>
-            <div className="development-grid">
-              {developmentStaff.map(([title, subtitle], index) => (
-                <article className="development-card" key={title}>
-                  <span>Tier {index < 4 ? '04' : '05'}</span>
-                  <div className="staff-monogram">AL</div>
-                  <h3>{title}</h3>
-                  <p>{subtitle}</p>
-                </article>
+            
+            <div className="development-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
+              {developmentStaff.map((person, index) => (
+                <CoachCard key={`${person.name}-${index}`} person={person} />
               ))}
             </div>
           </div>
