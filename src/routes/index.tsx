@@ -44,7 +44,7 @@ const hubDetails: Record<
     kicker: 'Active scholastic hubs',
     title: 'Training inside the school day',
     description:
-      'Operating in partner schools across Manhattan and Brooklyn. Registration is limited to currently enrolled students at each respective campus.',
+      'Operating in partner schools across Brooklyn, the Bronx and Manhattan, with Staten Island coming soon. Registration is limited to currently enrolled students at each respective campus.',
     meta: 'In-day PE · After-school enrichment',
   },
   private: {
@@ -63,16 +63,22 @@ const hubDetails: Record<
   },
 }
 
-// Map highlights follow the hub descriptions above: schools in Manhattan and Brooklyn, private coaching in Manhattan.
+// Map highlights follow the hub descriptions above: schools in Brooklyn, the Bronx and Manhattan, private coaching in Manhattan.
 const litBoroughs: Record<HubCategory, string[]> = {
-  schools: ['manhattan', 'brooklyn'],
+  schools: ['manhattan', 'brooklyn', 'bronx'],
   private: ['manhattan'],
   flagship: [],
 }
 
-const mapPins: { hub: HubCategory; point: keyof typeof PIN_POINTS; label: string }[] = [
+const mapPins: { hub: HubCategory; point: keyof typeof PIN_POINTS; label: string; soon?: boolean }[] = [
+  { hub: 'schools', point: 'schoolBrooklyn1', label: 'Brooklyn scholastic hub' },
+  { hub: 'schools', point: 'schoolBrooklyn2', label: 'Brooklyn scholastic hub' },
+  { hub: 'schools', point: 'schoolBrooklyn3', label: 'Brooklyn scholastic hub' },
+  { hub: 'schools', point: 'schoolBrooklyn4', label: 'Brooklyn scholastic hub' },
+  { hub: 'schools', point: 'schoolBronxNorth', label: 'Bronx scholastic hub' },
+  { hub: 'schools', point: 'schoolBronxSouth', label: 'Bronx scholastic hub' },
   { hub: 'schools', point: 'schoolManhattan', label: 'Manhattan scholastic hub' },
-  { hub: 'schools', point: 'schoolBrooklyn', label: 'Brooklyn scholastic hub' },
+  { hub: 'schools', point: 'schoolStatenSoon', label: 'Staten Island scholastic hub, coming soon', soon: true },
   { hub: 'private', point: 'privateManhattan', label: 'Manhattan private coaching' },
 ]
 
@@ -341,7 +347,7 @@ function AtlasLionsHome() {
                   return (
                     <g
                       key={pin.point}
-                      className={`svg-pin ${pin.hub}-pin ${activeHub === pin.hub ? 'active' : ''}`}
+                      className={`svg-pin ${pin.soon ? 'soon-pin' : `${pin.hub}-pin`} ${activeHub === pin.hub ? 'active' : ''}`}
                       transform={`translate(${x} ${y})`}
                       role="button"
                       tabIndex={0}
@@ -351,6 +357,7 @@ function AtlasLionsHome() {
                     >
                       <circle className="pin-halo" r="17" />
                       <circle className="pin-dot" r="7" />
+                      {pin.soon && <text className="soon-label" x="14" y="-12">Coming soon</text>}
                     </g>
                   )
                 })}
@@ -358,6 +365,7 @@ function AtlasLionsHome() {
               {activeHub === 'flagship' && <div className="map-note">Flagship location announced ahead of the 2027 launch</div>}
 
               <div className="map-status"><span className="live-dot" /> Academy network · New York City</div>
+              <div className="map-key"><span className="key-dot" /> Active <span className="key-dot soon" /> Coming soon</div>
             </div>
 
             <aside className="map-legend">
