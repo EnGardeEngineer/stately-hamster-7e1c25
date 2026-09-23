@@ -22,7 +22,7 @@ import {
   X,
   Zap,
 } from 'lucide-react'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 
 export const Route = createFileRoute('/')({
   component: AtlasLionsHome,
@@ -100,6 +100,7 @@ const staff = [
     role: 'Co-Founder · Épée Program',
     credentials: ['Founding Director', 'Moroccan National Team', 'World Cup & Grand Prix Competitor', 'NCAA Division I Athlete'],
     image: '/images/yehia-ellis.jpg',
+    imagePosition: 'center 30%',
     featured: 'founder',
   },
   {
@@ -171,10 +172,10 @@ const developmentStaff = [
   },
   {
     tier: 'Tier 04 · Nationally Competitive',
-    name: 'Cameron Daniel',
+    name: 'Camron Daniel',
     role: 'NYU',
     credentials: ['NCAA & Nationally Competitive Coach'],
-    image: '/images/cameron-daniel.jpg',
+    image: '/images/camron-daniel.jpg',
     featured: 'standard',
   }
 ]
@@ -398,7 +399,7 @@ function AtlasLionsHome() {
             </div>
             <CoachCard person={staff[2]} />
             
-            <div className="development-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
+            <div className="development-grid">
               {developmentStaff.map((person, index) => (
                 <CoachCard key={`${person.name}-${index}`} person={person} />
               ))}
@@ -466,10 +467,24 @@ function AtlasLionsHome() {
 }
 
 // THIS COMPONENT RENDERS THE CARDS FOR BOTH DATA ARRAYS
+// If a photo is missing or its file name doesn't match, show the coach's initials instead of a broken box.
 function CoachCard({ person }: { person: any }) {
+  const imgRef = useRef<HTMLImageElement>(null)
+  const [missing, setMissing] = useState(false)
+  const initials = person.name.split(' ').map((part: string) => part[0]).join('')
+
+  useEffect(() => {
+    const img = imgRef.current
+    if (img && img.complete && img.naturalWidth === 0) setMissing(true)
+  }, [])
+
   return (
     <article className={`coach-card coach-${person.featured}`}>
-      <img src={person.image} alt={`${person.name}, ${person.role}`} />
+      {missing ? (
+        <div className="coach-monogram" aria-hidden="true">{initials}</div>
+      ) : (
+        <img ref={imgRef} src={person.image} alt={`${person.name}, ${person.role}`} style={person.imagePosition ? { objectPosition: person.imagePosition } : undefined} onError={() => setMissing(true)} />
+      )}
       <div className="coach-shade" />
       <div className="coach-tier">{person.tier}</div>
       <div className="coach-info">
