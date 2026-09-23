@@ -388,9 +388,9 @@ function AtlasLionsHome() {
           </div>
 
           <div className="trust-bar">
-            <div><ShieldCheck /><span><strong>NYC DOE</strong>Fingerprint-ready standards</span></div>
-            <div><CircleCheck /><span><strong>Fully protected</strong>Liability-insured model</span></div>
-            <div><Award /><span><strong>SafeSport</strong>Aligned coaching culture</span></div>
+            <div><ShieldCheck /><span><strong>NYC DOE</strong>Fingerprinted &amp; FBI background-checked</span></div>
+            <div><CircleCheck /><span><strong>USA Fencing</strong>Certified coaching staff</span></div>
+            <div><Award /><span><strong>SafeSport</strong>Certified coaches</span></div>
           </div>
 
           <div className="staff-pyramid">
