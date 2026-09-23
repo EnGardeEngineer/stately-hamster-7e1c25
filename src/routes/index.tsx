@@ -100,7 +100,7 @@ const staff = [
     role: 'Co-Founder · Épée Program',
     credentials: ['Founding Director', 'Moroccan National Team', 'World Cup & Grand Prix Competitor', 'NCAA Division I Athlete'],
     image: '/images/yehia-ellis.jpg',
-    imagePosition: 'center 30%',
+    imagePosition: 'center top',
     featured: 'founder',
   },
   {
@@ -458,7 +458,7 @@ function AtlasLionsHome() {
           </div>
           <div className="member-badge"><Trophy size={24} /><span>USA Fencing<small>Member club pathway</small></span></div>
         </div>
-        <div className="page-shell footer-bottom"><span>© 2026 Atlas Lions Fencing. All rights reserved.</span><span>Photography: Augusto Bizzi / Wikimedia Commons</span><a href="#top">Back to top ↑</a></div>
+        <div className="page-shell footer-bottom"><span>© 2026 Atlas Lions Fencing. All rights reserved.</span><span>Photography: Augusto Bizzi; Marie-Lan Nguyen (CC BY 3.0) / Wikimedia Commons</span><a href="#top">Back to top ↑</a></div>
       </footer>
 
       {modalOpen && <HostProgramModal onClose={() => setModalOpen(false)} />}
