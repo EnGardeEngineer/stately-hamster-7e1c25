@@ -23,6 +23,7 @@ import {
   Zap,
 } from 'lucide-react'
 import { FormEvent, useEffect, useRef, useState } from 'react'
+import { BOROUGHS, BOROUGH_LABELS, MAP_VIEWBOX, PIN_POINTS } from '../nycBoroughs'
 
 export const Route = createFileRoute('/')({
   component: AtlasLionsHome,
@@ -61,6 +62,19 @@ const hubDetails: Record<
     meta: 'Launching 2027 · Founding access ahead',
   },
 }
+
+// Map highlights follow the hub descriptions above: schools in Manhattan and Brooklyn, private coaching in Manhattan.
+const litBoroughs: Record<HubCategory, string[]> = {
+  schools: ['manhattan', 'brooklyn'],
+  private: ['manhattan'],
+  flagship: [],
+}
+
+const mapPins: { hub: HubCategory; point: keyof typeof PIN_POINTS; label: string }[] = [
+  { hub: 'schools', point: 'schoolManhattan', label: 'Manhattan scholastic hub' },
+  { hub: 'schools', point: 'schoolBrooklyn', label: 'Brooklyn scholastic hub' },
+  { hub: 'private', point: 'privateManhattan', label: 'Manhattan private coaching' },
+]
 
 const programs = [
   {
@@ -115,7 +129,7 @@ const staff = [
     tier: 'Tier 02 · Marquee talent',
     name: 'Mohammed Elsayed',
     role: 'Olympic Medalist · Épée',
-    credentials: ['3x NCAA Champion', '10x World Champion', 'Current #1 in the World'],
+    credentials: ['World #1 · Men’s Épée (FIE)', 'Paris 2024 Olympic Bronze Medalist', '2026 World Championships Team Bronze'],
     image: '/images/mohammed-elsayed.jpg',
     featured: 'marquee',
   }
@@ -309,25 +323,39 @@ function AtlasLionsHome() {
           </div>
 
           <div className="academy-layout">
-            <div className="map-panel" aria-label="Interactive New York City academy map">
-              <div className="map-label map-label-bronx">The Bronx</div>
-              <div className="map-label map-label-manhattan">Manhattan</div>
-              <div className="map-label map-label-queens">Queens</div>
-              <div className="map-label map-label-brooklyn">Brooklyn</div>
-              <div className="map-label map-label-staten">Staten Island</div>
-              <svg className="borough-map" viewBox="0 0 700 620" aria-hidden="true">
-                <path className="borough-shape" d="M293 41 348 29 374 89 345 168 309 230 278 302 258 405 223 428 201 389 223 298 242 222 273 154Z" />
-                <path className="borough-shape" d="m375 116 142-10 105 79-37 93-122 7-90-44-38-70Z" />
-                <path className="borough-shape" d="m294 344 125-44 157 29-17 91-87 43-76 108-147-43-51-87Z" />
-                <path className="borough-shape" d="m189 70 84-14 17 95-61 63-56-47Z" />
-                <path className="borough-shape" d="m72 441 78-43 62 47-16 80-99 34-45-59Z" />
-                <path className="river-line" d="M323 29c-20 100-17 192-61 282-26 54-48 141-17 241" />
+            <div className="map-panel">
+              <svg className="borough-map" viewBox={MAP_VIEWBOX} role="img" aria-label="Map of New York City's five boroughs showing Atlas Lions locations">
+                {BOROUGHS.map((borough) => (
+                  <path key={borough.id} className={`borough-shape ${litBoroughs[activeHub].includes(borough.id) ? 'lit' : ''}`} d={borough.d} />
+                ))}
+                {BOROUGHS.map((borough) => {
+                  const [x, y] = BOROUGH_LABELS[borough.id]
+                  return (
+                    <text key={borough.id} className={`borough-label ${litBoroughs[activeHub].includes(borough.id) ? 'lit' : ''}`} x={x} y={y} transform={borough.id === 'manhattan' ? `rotate(-62 ${x} ${y})` : undefined}>
+                      {borough.name}
+                    </text>
+                  )
+                })}
+                {mapPins.map((pin) => {
+                  const [x, y] = PIN_POINTS[pin.point]
+                  return (
+                    <g
+                      key={pin.point}
+                      className={`svg-pin ${pin.hub}-pin ${activeHub === pin.hub ? 'active' : ''}`}
+                      transform={`translate(${x} ${y})`}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={pin.label}
+                      onClick={() => setActiveHub(pin.hub)}
+                      onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') setActiveHub(pin.hub) }}
+                    >
+                      <circle className="pin-halo" r="17" />
+                      <circle className="pin-dot" r="7" />
+                    </g>
+                  )
+                })}
               </svg>
-
-              <button className={`map-pin school-pin pin-one ${activeHub === 'schools' ? 'active' : ''}`} onClick={() => setActiveHub('schools')} aria-label="Manhattan scholastic hub"><span /></button>
-              <button className={`map-pin school-pin pin-two ${activeHub === 'schools' ? 'active' : ''}`} onClick={() => setActiveHub('schools')} aria-label="Brooklyn scholastic hub"><span /></button>
-              <button className={`map-pin private-pin pin-three ${activeHub === 'private' ? 'active' : ''}`} onClick={() => setActiveHub('private')} aria-label="Manhattan private coaching"><span /></button>
-              <button className={`map-pin flagship-pin pin-four ${activeHub === 'flagship' ? 'active' : ''}`} onClick={() => setActiveHub('flagship')} aria-label="Future flagship academy"><span /></button>
+              {activeHub === 'flagship' && <div className="map-note">Flagship location announced ahead of the 2027 launch</div>}
 
               <div className="map-status"><span className="live-dot" /> Academy network · New York City</div>
             </div>

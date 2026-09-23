@@ -86,19 +86,19 @@ img { display: block; max-width: 100%; }
 .academy-layout { display: grid; grid-template-columns: minmax(0, 1.72fr) minmax(300px, .78fr); min-height: 630px; border: 1px solid var(--line-dark); }
 .map-panel { position: relative; overflow: hidden; background: #0e1112; border-right: 1px solid var(--line-dark); }
 .map-panel::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at center, rgba(212,175,55,.07), transparent 56%), linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px); background-size: auto, 40px 40px, 40px 40px; }
-.borough-map { position: absolute; width: 84%; height: 85%; left: 7%; top: 5%; }
-.borough-shape { fill: #181c1e; stroke: #31383b; stroke-width: 1.3; transition: fill .3s ease; }
-.river-line { fill: none; stroke: rgba(212,175,55,.23); stroke-width: 2; stroke-dasharray: 5 8; }
-.map-label { position: absolute; z-index: 2; color: #555d60; font: 600 11px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .15em; }
-.map-label-bronx { top: 17%; left: 27%; }.map-label-manhattan { top: 42%; left: 24%; transform: rotate(-71deg); }.map-label-queens { top: 31%; right: 18%; }.map-label-brooklyn { bottom: 24%; left: 50%; }.map-label-staten { bottom: 14%; left: 12%; }
-.map-pin { position: absolute; z-index: 4; width: 24px; height: 24px; border: 0; background: transparent; padding: 0; }
-.map-pin::before { content: ''; position: absolute; inset: 0; border: 1px solid currentColor; border-radius: 50%; opacity: 0; transform: scale(.4); transition: opacity .25s, transform .25s; }
-.map-pin span { position: absolute; width: 9px; height: 9px; top: 7px; left: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 16px currentColor; }
-.map-pin:hover::before, .map-pin.active::before { opacity: .55; transform: scale(1); }
-.school-pin { color: white; }.private-pin { color: var(--gold); }.flagship-pin { color: var(--gold-bright); }
-.flagship-pin::after { content: ''; position: absolute; inset: 2px; border: 1px solid var(--gold); border-radius: 50%; animation: pulse 1.8s ease-out infinite; }
-@keyframes pulse { from { opacity: .8; transform: scale(.5); } to { opacity: 0; transform: scale(2.3); } }
-.pin-one { top: 34%; left: 36%; }.pin-two { top: 64%; left: 54%; }.pin-three { top: 47%; left: 32%; }.pin-four { top: 53%; left: 48%; }
+.borough-map { position: absolute; left: 5%; top: 4%; width: 90%; height: 84%; overflow: visible; }
+.borough-shape { fill: #181c1e; stroke: #3a4246; stroke-width: 1.2; stroke-linejoin: round; transition: fill .35s ease, stroke .35s ease; }
+.borough-shape.lit { fill: rgba(212,175,55,.16); stroke: rgba(212,175,55,.75); }
+.borough-label { fill: #5f686b; font: 700 17px 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .14em; text-anchor: middle; dominant-baseline: middle; pointer-events: none; transition: fill .35s ease; }
+.borough-label.lit { fill: #e9d9a2; }
+.svg-pin { cursor: pointer; outline: none; }
+.svg-pin .pin-dot { fill: currentColor; filter: drop-shadow(0 0 6px currentColor); }
+.svg-pin .pin-halo { fill: none; stroke: currentColor; stroke-width: 1.5; opacity: 0; transform: scale(.4); transform-box: fill-box; transform-origin: center; transition: opacity .25s, transform .25s; }
+.svg-pin:hover .pin-halo, .svg-pin:focus-visible .pin-halo, .svg-pin.active .pin-halo { opacity: .7; transform: scale(1); }
+.svg-pin.active .pin-dot { animation: pinPulse 1.8s ease-in-out infinite; }
+@keyframes pinPulse { 50% { filter: drop-shadow(0 0 14px currentColor); } }
+.schools-pin { color: #ffffff; }.private-pin { color: var(--gold); }
+.map-note { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 3; max-width: 78%; padding: 12px 16px; border: 1px dashed rgba(212,175,55,.6); background: rgba(8,10,11,.85); color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; text-align: center; }
 .map-status { position: absolute; left: 24px; bottom: 24px; z-index: 3; display: flex; align-items: center; gap: 9px; color: #8e9699; font-size: 9px; text-transform: uppercase; letter-spacing: .15em; }
 .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #67c981; box-shadow: 0 0 10px #67c981; }
 .map-legend { background: #0b0d0e; padding: 30px; display: flex; flex-direction: column; }
@@ -257,7 +257,7 @@ img { display: block; max-width: 100%; }
   .hero-content { padding-top: 130px; padding-bottom: 72px; align-items: flex-end; }.hero h1 { font-size: clamp(60px, 18.5vw, 82px); }.hero-subtext { font-size: 13px; line-height: 1.7; }.hero-actions { display: grid; }.button { width: 100%; }.scroll-cue { display: none; }
   .academy, .programs, .leadership { padding: 88px 0; }.leadership { padding-top: 10px; }
   .split-heading { grid-template-columns: 1fr; gap: 25px; }.section-heading { margin-bottom: 45px; }.section-heading h2 { font-size: 50px; }.section-heading > p, .split-heading > p { font-size: 12px; }
-  .map-panel { min-height: 430px; }.borough-map { width: 110%; left: -7%; }.map-label { font-size: 8px; }.map-label-manhattan { left: 17%; }.map-label-queens { right: 7%; }.map-label-staten { display: none; }.pin-one { left: 29%; }.pin-two { left: 54%; }.pin-three { left: 25%; }.map-legend { padding: 24px; min-height: 480px; }
+  .map-panel { min-height: 440px; }.borough-map { left: 2%; width: 96%; top: 3%; height: 82%; }.borough-label { font-size: 24px; }.map-legend { padding: 24px; min-height: 480px; }
   .program-grid { grid-template-columns: 1fr; }.program-card { min-height: 500px; }.program-icon { margin-top: 44px; }
   .centered-heading { text-align: left; align-items: flex-start; }.centered-heading .eyebrow { justify-content: flex-start; }.centered-heading > p:last-child { margin-top: 22px; }
   .trust-bar { grid-template-columns: 1fr; }.trust-bar > div { border-right: 0; border-bottom: 1px solid var(--line-light); justify-content: flex-start; }.trust-bar > div:last-child { border-bottom: 0; }
