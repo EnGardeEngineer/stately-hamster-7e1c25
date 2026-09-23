@@ -472,7 +472,7 @@ function AtlasLionsHome() {
           </div>
           <div className="footer-column">
             <h3>Connect</h3>
-            <a href="mailto:director@atlaslions.com">director@atlaslions.com</a>
+            <a href="mailto:atlaslionsfa@gmail.com">atlaslionsfa@gmail.com</a>
             <span>New York City, NY</span>
             <small><Clock3 size={14} /> School partnership inquiries processed within 48 business hours.</small>
           </div>
@@ -586,7 +586,7 @@ function HostProgramModal({ onClose }: { onClose: () => void }) {
             <label>Your role<select name="role" defaultValue="" required><option value="" disabled>Select role</option><option>Principal / administrator</option><option>Athletic director</option><option>PE department</option><option>Parent association</option><option>Corporate team lead</option><option>Other</option></select></label>
             <label>Estimated students<select name="students" defaultValue=""><option value="">Not sure yet</option><option>Fewer than 20</option><option>20–50</option><option>51–100</option><option>100+</option></select></label>
             <label className="full-field">What are you looking to build?<textarea name="message" rows={4} placeholder="Share your timeline, age group, and program goals." required /></label>
-            {state === 'error' && <p className="form-error full-field">We couldn’t send this inquiry. Please retry or email director@atlaslions.com.</p>}
+            {state === 'error' && <p className="form-error full-field">We couldn’t send this inquiry. Please retry or email atlaslionsfa@gmail.com.</p>}
             <button className="button button-gold full-field" type="submit" disabled={state === 'loading'}>{state === 'loading' ? 'Sending inquiry…' : 'Submit partnership inquiry'} <ArrowRight size={17} /></button>
           </form>
         )}
