@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Award,
   Building2,
-  Camera,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -26,7 +25,7 @@ import {
 } from 'lucide-react'
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { BOROUGHS, BOROUGH_LABELS, MAP_VIEWBOX, PIN_POINTS } from '../nycBoroughs'
-import { galleryPhotos } from '../gallery'
+import { galleryPhotos, pedigreePhotos, programPhotos, scholasticStrip } from '../gallery'
 
 export const Route = createFileRoute('/')({
   component: AtlasLionsHome,
@@ -264,11 +263,11 @@ function AtlasLionsHome() {
         </a>
 
         <nav className="desktop-nav" aria-label="Primary navigation">
-          <a href="#gallery">Gallery</a>
           <a href="#locations">Locations</a>
           <a href="#programs">Programs</a>
           <a href="#coaches">Coaches</a>
           <a href="#corporate">Corporate</a>
+          <a href="#gallery">Gallery</a>
         </nav>
 
         <button className="nav-cta desktop-cta" onClick={openModal}>
@@ -285,7 +284,7 @@ function AtlasLionsHome() {
 
         {menuOpen && (
           <nav className="mobile-nav" aria-label="Mobile navigation">
-            {['gallery', 'locations', 'programs', 'coaches', 'corporate'].map((item) => (
+            {['locations', 'programs', 'coaches', 'corporate', 'gallery'].map((item) => (
               <a key={item} href={`#${item}`} onClick={() => setMenuOpen(false)}>
                 {item}
               </a>
@@ -317,10 +316,8 @@ function AtlasLionsHome() {
             <div><strong>2027</strong><span>Flagship in development</span></div>
           </div>
         </div>
-        <a className="scroll-cue" href="#gallery"><span>Explore the academy</span><ArrowDown size={18} /></a>
+        <a className="scroll-cue" href="#locations"><span>Explore the academy</span><ArrowDown size={18} /></a>
       </section>
-
-      <GallerySection />
 
       <section className="academy section-dark" id="locations">
         <div className="page-shell">
@@ -394,6 +391,12 @@ function AtlasLionsHome() {
         </div>
       </section>
 
+      <section className="photo-strip" aria-label="Scholastic program photos">
+        {scholasticStrip.map((photo) => (
+          <figure key={photo.src}><img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" /><figcaption>{photo.alt}</figcaption></figure>
+        ))}
+      </section>
+
       <section className="programs section-light" id="programs">
         <div className="page-shell">
           <div className="section-heading split-heading light-heading">
@@ -404,10 +407,12 @@ function AtlasLionsHome() {
             <p>Every program is designed as part of a long-term athlete pathway—from the first salute to the national strip and collegiate recruitment.</p>
           </div>
           <div className="program-grid">
-            {programs.map((program) => {
+            {programs.map((program, index) => {
               const Icon = program.icon
+              const photo = programPhotos[index]
               return (
                 <article className="program-card" key={program.number}>
+                  {photo && <div className="program-photo"><img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" /></div>}
                   <div className="card-topline"><span>{program.number}</span><span>{program.label}</span></div>
                   <div className="program-icon"><Icon size={28} /></div>
                   <h3>{program.title}</h3>
@@ -447,6 +452,17 @@ function AtlasLionsHome() {
               ))}
             </div>
           </div>
+
+          <div className="pedigree-band">
+            {pedigreePhotos.map((photo) => (
+              <figure key={photo.src}><img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" /></figure>
+            ))}
+            <div className="pedigree-copy">
+              <p className="eyebrow"><span /> On the world stage</p>
+              <h3>The same strips our athletes are training for.</h3>
+              <p>Our founders compete internationally for Morocco on the World Cup and Grand Prix circuits, and bring that experience back to every class in New York.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -478,6 +494,8 @@ function AtlasLionsHome() {
         </div>
       </section>
 
+      <GallerySection />
+
       <footer className="footer">
         <div className="page-shell footer-grid">
           <div className="footer-brand">
@@ -508,13 +526,9 @@ function AtlasLionsHome() {
   )
 }
 
-const GALLERY_PREVIEW = 9
-
 function GallerySection() {
-  const [expanded, setExpanded] = useState(false)
   const [active, setActive] = useState<number | null>(null)
   const total = galleryPhotos.length
-  const visible = expanded ? galleryPhotos : galleryPhotos.slice(0, GALLERY_PREVIEW)
 
   useEffect(() => {
     if (active === null) return
@@ -541,25 +555,17 @@ function GallerySection() {
             <p className="eyebrow"><span /> Atlas Lions in session</p>
             <h2>On the strip.<br /><em>In the gym.</em></h2>
           </div>
-          <p>Real classes, real students, real coaching. From first-time fencers at community clinics to scholastic teams and international competition, this is what training with Atlas Lions looks like.</p>
+          <p>Real classes, real students, real coaching. This is what training with Atlas Lions looks like.</p>
         </div>
 
         <div className="gallery-grid">
-          {visible.map((photo, index) => (
+          {galleryPhotos.map((photo, index) => (
             <button key={photo.src} className="gallery-item" onClick={() => setActive(index)} aria-label={`Open photo: ${photo.alt}`}>
-              <img src={photo.src} alt={photo.alt} loading={index < 3 ? 'eager' : 'lazy'} decoding="async" />
+              <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
               <span className="gallery-caption">{photo.alt}</span>
             </button>
           ))}
         </div>
-
-        {total > GALLERY_PREVIEW && (
-          <div className="gallery-more">
-            <button className="button button-dark" onClick={() => setExpanded((v) => !v)}>
-              <Camera size={17} /> {expanded ? 'Show fewer photos' : `View all ${total} photos`}
-            </button>
-          </div>
-        )}
       </div>
 
       {active !== null && (
