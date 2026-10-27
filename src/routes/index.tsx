@@ -4,7 +4,9 @@ import {
   ArrowRight,
   Award,
   Building2,
+  Camera,
   Check,
+  ChevronLeft,
   ChevronRight,
   CircleCheck,
   Clock3,
@@ -24,6 +26,7 @@ import {
 } from 'lucide-react'
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { BOROUGHS, BOROUGH_LABELS, MAP_VIEWBOX, PIN_POINTS } from '../nycBoroughs'
+import { galleryPhotos } from '../gallery'
 
 export const Route = createFileRoute('/')({
   component: AtlasLionsHome,
@@ -261,6 +264,7 @@ function AtlasLionsHome() {
         </a>
 
         <nav className="desktop-nav" aria-label="Primary navigation">
+          <a href="#gallery">Gallery</a>
           <a href="#locations">Locations</a>
           <a href="#programs">Programs</a>
           <a href="#coaches">Coaches</a>
@@ -281,7 +285,7 @@ function AtlasLionsHome() {
 
         {menuOpen && (
           <nav className="mobile-nav" aria-label="Mobile navigation">
-            {['locations', 'programs', 'coaches', 'corporate'].map((item) => (
+            {['gallery', 'locations', 'programs', 'coaches', 'corporate'].map((item) => (
               <a key={item} href={`#${item}`} onClick={() => setMenuOpen(false)}>
                 {item}
               </a>
@@ -292,7 +296,7 @@ function AtlasLionsHome() {
       </header>
 
       <section className="hero" id="top">
-        <img src="/images/hero-fencing.jpg" alt="Elite fencers competing under arena lights" />
+        <img src="/images/hero-class.jpg" alt="Atlas Lions students running footwork drills in a school gym" />
         <div className="hero-overlay" />
         <div className="hero-grid" />
         <div className="hero-content page-shell">
@@ -313,8 +317,10 @@ function AtlasLionsHome() {
             <div><strong>2027</strong><span>Flagship in development</span></div>
           </div>
         </div>
-        <a className="scroll-cue" href="#locations"><span>Explore the academy</span><ArrowDown size={18} /></a>
+        <a className="scroll-cue" href="#gallery"><span>Explore the academy</span><ArrowDown size={18} /></a>
       </section>
+
+      <GallerySection />
 
       <section className="academy section-dark" id="locations">
         <div className="page-shell">
@@ -445,7 +451,7 @@ function AtlasLionsHome() {
       </section>
 
       <section className="corporate" id="corporate">
-        <img src="/images/team-fencing.jpg" alt="Fencing team preparing together" />
+        <img src="/images/team-class.jpg" alt="A full class of fencers training together" />
         <div className="corporate-overlay" />
         <div className="page-shell corporate-content">
           <div className="corporate-mark"><Swords size={38} /></div>
@@ -486,7 +492,7 @@ function AtlasLionsHome() {
           </div>
           <div className="footer-column">
             <h3>Explore</h3>
-            <a href="#locations">Academy locations</a><a href="#programs">Training programs</a><a href="#coaches">Coaching pedigree</a><a href="#corporate">Atlas Lions Executive</a>
+            <a href="#gallery">Gallery</a><a href="#locations">Academy locations</a><a href="#programs">Training programs</a><a href="#coaches">Coaching pedigree</a><a href="#corporate">Atlas Lions Executive</a>
           </div>
           <div className="footer-column">
             <h3>Standards</h3>
@@ -499,6 +505,75 @@ function AtlasLionsHome() {
 
       {modalOpen && <HostProgramModal onClose={() => setModalOpen(false)} />}
     </main>
+  )
+}
+
+const GALLERY_PREVIEW = 9
+
+function GallerySection() {
+  const [expanded, setExpanded] = useState(false)
+  const [active, setActive] = useState<number | null>(null)
+  const total = galleryPhotos.length
+  const visible = expanded ? galleryPhotos : galleryPhotos.slice(0, GALLERY_PREVIEW)
+
+  useEffect(() => {
+    if (active === null) return
+    document.body.style.overflow = 'hidden'
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setActive(null)
+      if (event.key === 'ArrowRight') setActive((i) => (i === null ? i : (i + 1) % total))
+      if (event.key === 'ArrowLeft') setActive((i) => (i === null ? i : (i - 1 + total) % total))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [active, total])
+
+  if (total === 0) return null
+
+  return (
+    <section className="gallery section-light" id="gallery">
+      <div className="page-shell">
+        <div className="section-heading split-heading light-heading">
+          <div>
+            <p className="eyebrow"><span /> Atlas Lions in session</p>
+            <h2>On the strip.<br /><em>In the gym.</em></h2>
+          </div>
+          <p>Real classes, real students, real coaching. From first-time fencers at community clinics to scholastic teams and international competition, this is what training with Atlas Lions looks like.</p>
+        </div>
+
+        <div className="gallery-grid">
+          {visible.map((photo, index) => (
+            <button key={photo.src} className="gallery-item" onClick={() => setActive(index)} aria-label={`Open photo: ${photo.alt}`}>
+              <img src={photo.src} alt={photo.alt} loading={index < 3 ? 'eager' : 'lazy'} decoding="async" />
+              <span className="gallery-caption">{photo.alt}</span>
+            </button>
+          ))}
+        </div>
+
+        {total > GALLERY_PREVIEW && (
+          <div className="gallery-more">
+            <button className="button button-dark" onClick={() => setExpanded((v) => !v)}>
+              <Camera size={17} /> {expanded ? 'Show fewer photos' : `View all ${total} photos`}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {active !== null && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" onMouseDown={(event) => event.target === event.currentTarget && setActive(null)}>
+          <button className="lightbox-close" onClick={() => setActive(null)} aria-label="Close photo"><X /></button>
+          <button className="lightbox-nav prev" onClick={() => setActive((active - 1 + total) % total)} aria-label="Previous photo"><ChevronLeft size={30} /></button>
+          <figure>
+            <img src={galleryPhotos[active].src} alt={galleryPhotos[active].alt} />
+            <figcaption><span>{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>{galleryPhotos[active].alt}</figcaption>
+          </figure>
+          <button className="lightbox-nav next" onClick={() => setActive((active + 1) % total)} aria-label="Next photo"><ChevronRight size={30} /></button>
+        </div>
+      )}
+    </section>
   )
 }
 
